@@ -16,6 +16,7 @@ player / computer | paper | scissor | rock |
 1 equals player's win
 -1 equals player's lose
 */
+
 const RULE = [
     [0, -1, 1], 
     [1, 0 ,-1], 
@@ -24,47 +25,54 @@ const RULE = [
 
 
 function getComputerChoice() {
-    return choiceNum = Math.floor(Math.random() * 3);
+    return Math.floor(Math.random() * 3);
 }
 
-function getPlayerChoice() {
-    let playerChoice = prompt('Input your choice').toLowerCase();
 
-    while (CHOICE.indexOf(playerChoice) == -1) {
-        playerChoice = prompt('Invalid input, Please input again').toLowerCase();
+function getPlayerChoice(event) {
+    let playerChoice = "";
+
+    switch (event.target.id) {
+        case "paper":
+            playerChoice = "paper";
+            break;
+        case "scissor":
+            playerChoice = "scissor";
+            break;
+        case "rock":
+            playerChoice = "rock";
+            break;
     }
 
     return CHOICE.indexOf(playerChoice);
 }
 
-function playRound() {
-    playerChoice = getPlayerChoice();
-    console.log(`player choice is ${CHOICE[playerChoice]}`)
-    
-    computerChoice = getComputerChoice();
-    console.log(`computer choice is ${CHOICE[computerChoice]}`)
-    
-    roundResult = RULE[playerChoice][computerChoice];
+
+function playRound(event) {
+    let playerChoice = getPlayerChoice(event);
+    let computerChoice = getComputerChoice();
+    let roundResult = RULE[playerChoice][computerChoice];
+
+    return [playerChoice, computerChoice, roundResult];
+}
+
+const choiceButton = document.querySelector(".option");
+const summary = document.querySelectorAll(".summary")
+
+choiceButton.addEventListener("click", function(event) {
+    let [playerChoice, computerChoice, roundResult] = playRound(event);
+    summary[1].innerHTML = `Player choice is ${CHOICE[playerChoice]}`;
+    summary[2].innerHTML =  `Computer choice is ${CHOICE[computerChoice]}`;
 
     if (roundResult === 1) {
-        console.log('You win!!')
+        summary[3].innerHTML = 'You win !!';
     }
     else if (roundResult === -1) {
-        console.log('You lose!!')
+        summary[3].innerHTML = 'You lose !!';
     }
     else {
-        console.log('tie')
+        summary[3].innerHTML = 'Tie !!';
     }
-    
-    return roundResult;
-}
 
-function main() {
-    roundResult = playRound()
-    
-    while (roundResult === 0 || roundResult === -1) {
-        roundResult = playRound()
     }
-}
-
-main()
+)
