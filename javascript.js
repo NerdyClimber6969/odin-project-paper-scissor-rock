@@ -57,21 +57,22 @@ function playRound(event) {
 }
 
 const choiceButton = document.querySelector(".option");
-const summary = document.querySelectorAll(".summary")
+const [summary, playerSummary, computerSummary, resultSummary] = document.querySelectorAll(".summary")
 
 choiceButton.addEventListener("click", function(event) {
     let [playerChoice, computerChoice, roundResult] = playRound(event);
-    summary[1].innerHTML = `Player choice is ${CHOICE[playerChoice]}`;
-    summary[2].innerHTML =  `Computer choice is ${CHOICE[computerChoice]}`;
+
+    playerSummary.innerHTML = `Player choice is ${CHOICE[playerChoice]}`;
+    computerSummary.innerHTML =  `Computer choice is ${CHOICE[computerChoice]}`;
 
     if (roundResult === 1) {
-        summary[3].innerHTML = 'You win !!';
+        resultSummary.innerHTML = 'You win !!';
     }
     else if (roundResult === -1) {
-        summary[3].innerHTML = 'You lose !!';
+        resultSummary.innerHTML = 'You lose !!';
     }
     else {
-        summary[3].innerHTML = 'Tie !!';
+        resultSummary.innerHTML = 'Tie !!';
     }
 
     }
