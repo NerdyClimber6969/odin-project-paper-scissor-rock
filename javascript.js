@@ -23,11 +23,15 @@ const RULE = [
     [-1, 1, 0]
 ]; 
 
+const choiceButton = document.querySelector(".option");
+const [summary, choiceSummary, scoreSummary, roundSummary, gameResult] = document.querySelectorAll(".summary");
+let playerScore = 0;
+let computerScore = 0;
+let numRound = 0;
 
 function getComputerChoice() {
     return Math.floor(Math.random() * 3);
 }
-
 
 function getPlayerChoice(event) {
     let playerChoice = "";
@@ -46,34 +50,48 @@ function getPlayerChoice(event) {
 
     return CHOICE.indexOf(playerChoice);
 }
-
-
+  
 function playRound(event) {
     let playerChoice = getPlayerChoice(event);
     let computerChoice = getComputerChoice();
     let roundResult = RULE[playerChoice][computerChoice];
 
-    return [playerChoice, computerChoice, roundResult];
-}
-
-const choiceButton = document.querySelector(".option");
-const [summary, playerSummary, computerSummary, resultSummary] = document.querySelectorAll(".summary")
-
-choiceButton.addEventListener("click", function(event) {
-    let [playerChoice, computerChoice, roundResult] = playRound(event);
-
-    playerSummary.innerHTML = `Player choice is ${CHOICE[playerChoice]}`;
-    computerSummary.innerHTML =  `Computer choice is ${CHOICE[computerChoice]}`;
+    gameResult.innerHTML = "";
+    numRound++;
+    choiceSummary.innerHTML = `Player: ${CHOICE[playerChoice]} ---- Computer: ${CHOICE[computerChoice]}`;
+    roundSummary.innerHTML = `Round: ${numRound} --- `
 
     if (roundResult === 1) {
-        resultSummary.innerHTML = 'You win !!';
+        playerScore++;
+        roundSummary.innerHTML += 'You win this round !!';
     }
     else if (roundResult === -1) {
-        resultSummary.innerHTML = 'You lose !!';
+        computerScore++;
+        roundSummary.innerHTML += 'You lose this round !!';
     }
     else {
-        resultSummary.innerHTML = 'Tie !!';
+        roundSummary.innerHTML += 'This round tie !!';
     }
 
+    scoreSummary.innerHTML = `Player: ${playerScore} ---- Computer: ${computerScore}`;
+
+    if (numRound === 5 || playerScore === 3 || computerChoice === 3) {
+        if (playerScore > computerScore) {
+            gameResult.innerHTML = "You win the game!!";
+        }
+        else if (playerScore < computerScore) {
+            gameResult.innerHTML = "You lose the game!!";
+        }
+        else if (playerScore === computerScore) {
+            gameResult.innerHTML = "Tie !!";
+        }
+
+        playerScore = 0;
+        computerScore = 0;
+        numRound = 0;
     }
-)
+}
+
+choiceButton.addEventListener("click", function(event) {
+    playRound(event);
+})
