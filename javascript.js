@@ -50,7 +50,11 @@ function getPlayerChoice(event) {
 
     return CHOICE.indexOf(playerChoice);
 }
-  
+
+function isGameOver() {
+    return numRound >= 7 || playerScore >= 5 || computerScore >= 5;
+}
+
 function playRound(event) {
     let playerChoice = getPlayerChoice(event);
     let computerChoice = getComputerChoice();
@@ -75,15 +79,15 @@ function playRound(event) {
 
     scoreSummary.innerHTML = `Player: ${playerScore} ---- Computer: ${computerScore}`;
 
-    if (numRound === 5 || playerScore === 3 || computerChoice === 3) {
-        if (playerScore > computerScore) {
+    if (isGameOver()) {
+        if (Math.abs(playerScore - computerScore) < 2) {
+            return;
+        }
+        else if (playerScore > computerScore) {
             gameResult.innerHTML = "You win the game!!";
         }
         else if (playerScore < computerScore) {
             gameResult.innerHTML = "You lose the game!!";
-        }
-        else if (playerScore === computerScore) {
-            gameResult.innerHTML = "Tie !!";
         }
 
         playerScore = 0;
@@ -92,6 +96,7 @@ function playRound(event) {
     }
 }
 
+    
 choiceButton.addEventListener("click", function(event) {
     playRound(event);
 })
